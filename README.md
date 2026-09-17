@@ -43,6 +43,7 @@ The project is currently developed and tested on Linux.
 Clone the repository:
 
 git clone https://github.com/rishabhj2004/metroidvania_game/
+
 cd platformer
 
 
