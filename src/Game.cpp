@@ -92,10 +92,12 @@ Game::Game()
     lastSafePosition=spawn;
 
     enemyManager.loadFromLevel(*level, assets);
-    camera.setCenter(
+    cameraStartPosition = sf::Vector2f(
         spawn.x + 200.f,
         spawn.y + 100.f
     );
+
+    camera.setCenter(cameraStartPosition);
 }
 
 void Game::run()
@@ -248,7 +250,7 @@ void Game::render()
 
     //World
     window.setView(camera);
-
+    level->drawBackground(window, cameraStartPosition);
     level->draw(window);
 
     if(player.isHitFlashing())
@@ -501,10 +503,12 @@ void Game::loadLevel(
     player.setPosition(spawn);
     lastSafePosition = spawn;
     enemyManager.reset(*level, assets);
-    camera.setCenter(
+    cameraStartPosition = sf::Vector2f(
         spawn.x + 200.f,
         spawn.y + 100.f
     );
+
+    camera.setCenter(cameraStartPosition);
 }
 
 void Game::startLevelTransition(
@@ -605,10 +609,12 @@ void Game::updateDeathTransition(float dt)
                 player.respawn(spawn);
                 lastSafePosition = spawn;
                 enemyManager.reset(*level, assets);
-                camera.setCenter(
+                cameraStartPosition = sf::Vector2f(
                     spawn.x + 200.f,
                     spawn.y + 100.f
                 );
+
+                camera.setCenter(cameraStartPosition);
             }
             else
             {
@@ -617,10 +623,12 @@ void Game::updateDeathTransition(float dt)
                 player.respawn(spawn);
                 lastSafePosition = spawn;
                 enemyManager.reset(*level, assets);
-                camera.setCenter(
+                cameraStartPosition = sf::Vector2f(
                     spawn.x + 200.f,
                     spawn.y + 100.f
                 );
+
+                camera.setCenter(cameraStartPosition);
             }
 
             deathTransitionState = DeathTransitionState::FadeIn;

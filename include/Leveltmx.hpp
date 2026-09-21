@@ -5,11 +5,20 @@
 #include <tmxlite/ObjectGroup.hpp>
 #include <SFML/Graphics/Shader.hpp>
 #include <string>
+#include <tmxlite/ImageLayer.hpp>
+#include <tmxlite/LayerGroup.hpp>
 
 struct TilesetData
 {
     tmx::Tileset tileset;
     sf::Texture texture;
+};
+
+struct BackgroundData
+{
+    tmx::ImageLayer* layer;
+    sf::Texture texture;
+    sf::Vector2f startPosition;
 };
 
 struct CollisionRect
@@ -44,6 +53,8 @@ private:
     sf::Shader platformShader;
     sf::Texture noiseTexture;
     std::vector<DamageRect> damageTiles;
+    std::vector<BackgroundData> backgrounds;
+
 
 public:
     Leveltmx(const std::string& filename);
@@ -58,4 +69,8 @@ public:
     std::vector<EnemySpawn> getEnemySpawns() const;
     std::vector<LevelExit> getLevelExits() const;
     const std::vector<DamageRect>& getDamageTiles() const;
+    void drawBackground(
+        sf::RenderWindow& window,
+        const sf::Vector2f& cameraStart
+    );
 };

@@ -44,6 +44,7 @@ class Game{
         void saveGame();
         sf::Clock absoluteClock;
         float cameraLookAhead;
+        sf::Vector2f cameraStartPosition;
         HealthBar healthBar;
         void checkLevelExit();
         void loadLevel(

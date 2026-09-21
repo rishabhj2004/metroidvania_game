@@ -159,6 +159,55 @@ Leveltmx::Leveltmx(const std::string& filename)
                       << damageTiles.size()
                       << '\n';
     }
+
+    for (const auto& layer : map.getLayers())
+    {
+        if (layer->getType() != tmx::Layer::Type::Group)
+            continue;
+
+        if (layer->getName() != "Background")
+            continue;
+
+        const auto& group =
+            layer->getLayerAs<tmx::LayerGroup>();
+
+        for (const auto& child : group.getLayers())
+        {
+            if (child->getType() != tmx::Layer::Type::Image)
+                continue;
+
+            if (child->getName() != "Background1")
+                continue;
+
+            const auto& imageLayer =
+                child->getLayerAs<tmx::ImageLayer>();
+
+            BackgroundData data;
+
+            data.layer =
+                const_cast<tmx::ImageLayer*>(&imageLayer);
+
+            data.startPosition = sf::Vector2f(
+                imageLayer.getOffset().x,
+                imageLayer.getOffset().y
+            );
+
+            if (!data.texture.loadFromFile(imageLayer.getImagePath()))
+            {
+                std::cerr << "Failed to load background image: "
+                          << imageLayer.getImagePath()
+                          << '\n';
+
+                continue;
+            }
+
+            backgrounds.push_back(std::move(data));
+
+            std::cout << "Loaded background: "
+                      << imageLayer.getImagePath()
+                      << '\n';
+        }
+    }
     if (sf::Shader::isAvailable())
     {
         platformShader.loadFromFile("assets/shaders/wind.frag", sf::Shader::Fragment);
@@ -582,4 +631,43 @@ std::vector<LevelExit> Leveltmx::getLevelExits() const
     }
 
     return exits;
+}
+
+void Leveltmx::drawBackground(
+    sf::RenderWindow& window,
+    const sf::Vector2f& cameraStartPosition
+)
+{
+    sf::Vector2f cameraCenter =
+        window.getView().getCenter();
+
+    for (const auto& background : backgrounds)
+    {
+        sf::Sprite sprite;
+        sprite.setTexture(background.texture);
+
+        float parallaxX =
+            background.layer->getParallaxFactor().x;
+
+        float parallaxY =
+            background.layer->getParallaxFactor().y;
+
+        sf::Vector2f cameraMovement =
+            cameraCenter - cameraStartPosition;
+
+        sf::Vector2f position =
+            background.startPosition;
+
+        position.x +=
+            cameraMovement.x * parallaxX;
+
+        position.y =
+            background.startPosition.y +
+            (cameraCenter.y -
+             window.getView().getSize().y / 2.f);
+
+        sprite.setPosition(position);
+
+        window.draw(sprite);
+    }
 }
