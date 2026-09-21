@@ -26,6 +26,7 @@ enum class DeathTransitionState
 class Game{
     private:
         sf::View camera;
+        sf::View backgroundView;
         void processEvents();
         void update(float dt);
         void render();

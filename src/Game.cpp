@@ -9,6 +9,7 @@ Game::Game()
     currentLevel("level1.tmx"),
     level(nullptr),
     camera(sf::FloatRect(0.f,0.f,1280.f,720.f)),
+    backgroundView(sf::FloatRect(0.f, 0.f, 1280.f, 720.f)),
     cameraLookAhead(0.f),
     transitionState(TransitionState::None),
     transitionAlpha(0.f),
@@ -98,6 +99,10 @@ Game::Game()
     );
 
     camera.setCenter(cameraStartPosition);
+    backgroundView.setCenter(
+        640.f,
+        360.f
+    );
 }
 
 void Game::run()
@@ -249,8 +254,9 @@ void Game::render()
     window.clear();
 
     //World
-    window.setView(camera);
+    window.setView(backgroundView);
     level->drawBackground(window, cameraStartPosition);
+    window.setView(camera);
     level->draw(window);
 
     if(player.isHitFlashing())
@@ -460,6 +466,7 @@ void Game::updateCamera(float dt)
     }
 
     camera.setCenter(currentX, currentY);
+    backgroundView.setCenter(camera.getCenter());
 }
 
 void Game::saveGame()
