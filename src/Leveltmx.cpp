@@ -1,6 +1,7 @@
 #include "Leveltmx.hpp"
 #include <iostream>
 #include <tmxlite/TileLayer.hpp>
+#include <algorithm>
 
 Leveltmx::Leveltmx(const std::string& filename)
 {
@@ -174,9 +175,6 @@ Leveltmx::Leveltmx(const std::string& filename)
         for (const auto& child : group.getLayers())
         {
             if (child->getType() != tmx::Layer::Type::Image)
-                continue;
-
-            if (child->getName() != "Background1")
                 continue;
 
             const auto& imageLayer =
@@ -632,42 +630,44 @@ std::vector<LevelExit> Leveltmx::getLevelExits() const
 
     return exits;
 }
-
 void Leveltmx::drawBackground(
     sf::RenderWindow& window,
     const sf::Vector2f& cameraStartPosition
 )
 {
-    sf::Vector2f cameraCenter =
-        window.getView().getCenter();
+    sf::Vector2f cameraCenter=window.getView().getCenter();
+
+    float viewWidth=window.getView().getSize().x;
+
+    float viewHeight=window.getView().getSize().y;
+
+    float viewLeft=cameraCenter.x - viewWidth / 2.f;
+
+    float viewRight=cameraCenter.x + viewWidth / 2.f;
+
+    float viewTop=cameraCenter.y - viewHeight / 2.f;
+
+    float viewBottom=cameraCenter.y + viewHeight / 2.f;
 
     for (const auto& background : backgrounds)
     {
         sf::Sprite sprite;
         sprite.setTexture(background.texture);
-
-        float parallaxX =
-            background.layer->getParallaxFactor().x;
-
-        float parallaxY =
-            background.layer->getParallaxFactor().y;
-
-        sf::Vector2f cameraMovement =
-            cameraCenter - cameraStartPosition;
-
-        sf::Vector2f position =
-            background.startPosition;
-
-        position.x +=
-            cameraMovement.x * parallaxX;
-
-        position.y =
-            background.startPosition.y +
-            (cameraCenter.y -
-             window.getView().getSize().y / 2.f);
-
+        float parallaxX =background.layer->getParallaxFactor().x;
+        float parallaxY=background.layer->getParallaxFactor().y;
+        sf::Vector2f cameraMovement=cameraCenter-cameraStartPosition;
+        sf::Vector2f position=background.startPosition;
+        position.x +=cameraMovement.x * parallaxX;
+        position.y +=cameraMovement.y * parallaxY;
+        float backgroundWidth =static_cast<float>(background.texture.getSize().x);
+        float backgroundHeight=static_cast<float>(background.texture.getSize().y);
+        float minX=viewRight-backgroundWidth;
+        float maxX=viewLeft;
+        position.x=std::clamp(position.x,minX,maxX);
+        float minY=viewBottom - backgroundHeight;
+        float maxY=viewTop;
+        position.y=std::clamp(position.y,minY,maxY);
         sprite.setPosition(position);
-
         window.draw(sprite);
     }
 }
