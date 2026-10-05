@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.12.2-2-geb83ddb9" orientation="orthogonal" renderorder="right-down" width="60" height="60" tilewidth="16" tileheight="16" infinite="0" parallaxoriginx="0.1" parallaxoriginy="0.1" nextlayerid="15" nextobjectid="21">
+<map version="1.10" tiledversion="1.12.2-2-geb83ddb9" orientation="orthogonal" renderorder="right-down" width="60" height="60" tilewidth="16" tileheight="16" infinite="0" parallaxoriginx="0.01" parallaxoriginy="0.01" nextlayerid="15" nextobjectid="21">
  <tileset firstgid="1" name="level1-tileset1" tilewidth="16" tileheight="16" tilecount="900" columns="30">
   <image source="../textures/tilesets/tileset2.png" width="480" height="480"/>
  </tileset>
  <group id="11" name="Background">
-  <imagelayer id="9" name="Background1" offsetx="-266.853" offsety="-159.541" parallaxx="0.01" parallaxy="0.01">
+  <imagelayer id="9" name="Background1" offsetx="-621.398" offsety="-92.8743" parallaxx="0.5" parallaxy="0.5">
    <image source="../textures/Backgrounds/sky.png" width="1920" height="1080"/>
   </imagelayer>
-  <imagelayer id="14" name="Background2" offsetx="-244" offsety="-140" parallaxx="0.05" parallaxy="0.05">
+  <imagelayer id="14" name="Background2" offsetx="-586.182" offsety="-30.6667" parallaxx="0.6" parallaxy="0.6">
    <image source="../textures/Backgrounds/mountains.png" width="1920" height="1080"/>
   </imagelayer>
  </group>

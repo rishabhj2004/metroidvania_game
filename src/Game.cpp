@@ -23,6 +23,7 @@ Game::Game()
     window.setFramerateLimit(60);
     window.setKeyRepeatEnabled(false);
     camera.zoom(0.5f);
+    backgroundView.zoom(0.5f);
     transitionOverlay.setSize(
         window.getDefaultView().getSize()
     );
@@ -257,7 +258,8 @@ void Game::render()
     window.setView(backgroundView);
     level->drawBackground(window, cameraStartPosition);
     window.setView(camera);
-    level->draw(window);
+    float totalTime = absoluteClock.getElapsedTime().asSeconds();
+    level->draw(window,totalTime);
 
     if(player.isHitFlashing())
     {
@@ -279,7 +281,6 @@ void Game::render()
 
     enemyManager.render(window);
     level->drawForeground(window);
-    float totalTime = absoluteClock.getElapsedTime().asSeconds();
     level->drawPlatforms(window, totalTime);
 
     //UI

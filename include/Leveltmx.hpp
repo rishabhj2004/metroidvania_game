@@ -58,7 +58,7 @@ private:
 
 public:
     Leveltmx(const std::string& filename);
-    void draw(sf::RenderWindow& window);
+    void draw(sf::RenderWindow& window, float totalTime);
     void drawPlatforms(sf::RenderWindow& window, float totalTime);
     void drawForeground(sf::RenderWindow& window);
 
